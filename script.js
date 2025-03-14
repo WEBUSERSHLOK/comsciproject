@@ -1,7 +1,7 @@
 const playBoard = document.querySelector(".play-board");
 const scoreElement = document.querySelector(".score");
-const highScoreElement = document.querySelector(".contols i");
-const controls = document.querySelector(".high-score");
+const highScoreElement = document.querySelector(".high-score");
+const controls = document.querySelector(".controls i");
 
 let gameOver = false;
 let foodX, foodY;
@@ -18,12 +18,12 @@ const gridSize = 20;
 //Get high score or set it to 0
 let highScore = localStorage.getItem("high-score") || 0;
 //Displaying the high score
-highScoreElement.innerText = `High Score: $(highscore}`;
+highScoreElement.innerText = `High Score: ${highScore}`;
 
 //Function to randomly place food on the grid
 const changeFoodPosition = () => {
-    foodX = Math.floor(Math.random()* 20) + 1;
-    foodY = Math.floor(Math.random ()* 20) + 1;
+    foodX = Math.floor(Math.random() * gridSize) + 1;
+    foodY = Math.floor(Math.random() * gridSize) + 1;
     //Random X and Y positions
 }
 
@@ -39,16 +39,16 @@ const handleGameOver = () => {
 
 //Function to change snake's direction based off keys
 const changeDirection = (e) => {
-    if (e.key == "ArrowUp" && velocityY !== 1 /*To prevent reverse*/){
+    if (e.key ==="ArrowUp" && velocityY !== 1 /*To prevent reverse*/){
         velocityX = 0;
         velocityY = -1; //Moving up
-    } else if(e.key == "ArrowDown" && velocityY !== 1  ){
+    } else if(e.key ==="ArrowDown" && velocityY !== -1  ){
         velocityX = 0;
         velocityY = 1;
-    } else if(e.key == "ArrowLeft" && velocityX !== 1 /*To prevent X reverse*/){
+    } else if(e.key==="ArrowLeft" && velocityX !== 1 /*To prevent X reverse*/){
         velocityX = -1;
         velocityY = 0;
-    } else if (e.key == "ArrowRight" && velocityX !== 1){
+    } else if (e.key=== "ArrowRight" && velocityX !== -1){
         velocityX = 1;
         velocityY = 0;
     }
@@ -61,23 +61,24 @@ const initGame = () => {
     if (gameOver) return handleGameOver();
 
     //Create the food
-    let htmlMarkup = `<div class="food" style="grid-area: ${foodY} / ${foodX}; width: 25px; height 25px;"></div>`
+    let htmlMarkup = `<div class="food" style="grid-area: ${foodY} / ${foodX}; width: 25px; height: 25px;"></div>`
 
     //Checking if snake hit food
     if (snakeX === foodX && snakeY === foodY){
         //Create a new food position using function 
         changeFoodPosition();
         //Pushing the snake body list and making it bigger
-        snakeBody.push([foodX, foodY]);
+        snakeBody.push([snakeX,snakeY]);
         //Adding the score
         score++;
 
         //Update the high score
-        highScore = score >= highScore ? score: highScore;
+        highScore = score >= highScore ? score : highScore;
         //Saving the high score
         localStorage.setItem("high-score", highScore);
         //Update the score on the box
-        scoreElement.innerText = `High Score: ${highScore}`;
+        scoreElement.innerText = `Score: ${score}`;
+        highScoreElement.innerText = `High Score: ${highScore}`
     }
 
     //Move snake body 
@@ -91,7 +92,7 @@ const initGame = () => {
     snakeX += velocityX;
     snakeY += velocityY;
     //Check for collisions
-    if (snakeX <= 0 || snakeX > gridSize || snakeY< 0 || snakeY > gridSize) {
+    if (snakeX <= 0 || snakeX > 20 || snakeY <= 0 || snakeY > 20) {
         //End the game
         gameOver = true;
     }
